@@ -1,9 +1,11 @@
 extern crate ncurses;
 
 mod coord;
+mod screen_symbol;
 
 use coord::Coord;
 use ncurses::*;
+use screen_symbol::ScreenSymbol;
 
 fn main() {
     // Init ncurses
@@ -46,11 +48,19 @@ fn main() {
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
 
     // Display marker at player position
-    let _ = mvaddch(player_pos.y, player_pos.x, '@' as u32);
+    let _ = mvaddch(
+        player_pos.y,
+        player_pos.x,
+        ScreenSymbol::Player.as_char() as u32,
+    );
     let _ = mvaddstr(player_pos.y + 1, player_pos.x - 1, "YOU");
 
     // Display marker at treasure position
-    let _ = mvaddch(treasure_pos.y, treasure_pos.x, '*' as u32);
+    let _ = mvaddch(
+        treasure_pos.y,
+        treasure_pos.x,
+        ScreenSymbol::Gold.as_char() as u32,
+    );
     let _ = mvaddstr(treasure_pos.y + 1, treasure_pos.x - 1, "GOLD");
 
     // Eq test

@@ -152,7 +152,7 @@ xcrypt.c
 #endif
 
 /*
- * things that appear on the screens
+ ✅  * things that appear on the screens
  */
 #define PASSAGE		'#'
 #define DOOR		'+'
@@ -170,8 +170,8 @@ xcrypt.c
 #define AMULET		','
 #define RING		'='
 #define STICK		'/'
-#define CALLABLE	-1
-#define R_OR_S		-2
+#define CALLABLE	-1 // not used
+#define R_OR_S		-2 // not used
 
 /*
  * Various constants
