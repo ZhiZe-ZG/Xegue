@@ -392,7 +392,7 @@ struct h_list {
 };
 
 /*
- * Coordinate data type
+ ✅ * Coordinate data type
  */
 typedef struct {
     int x;
