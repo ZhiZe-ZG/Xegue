@@ -4,10 +4,10 @@ use ncurses::*;
 
 fn main() {
     // Init ncurses
-    initscr();              // Initialize the window
-    raw();                  // Disable line buffering
+    initscr(); // Initialize the window
+    raw(); // Disable line buffering
     keypad(stdscr(), true); // Enable function keys
-    noecho();               // Disable echoing of input characters
+    noecho(); // Disable echoing of input characters
 
     // Print text
     let _ = addstr("Hello, Xegue!\n");
