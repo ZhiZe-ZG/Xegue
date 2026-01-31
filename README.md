@@ -823,3 +823,5 @@ extern int      cNWOOD;
 extern char     *metal[];
 extern int      cNMETAL;
 ```
+
+- [ ] Write document and guide.
