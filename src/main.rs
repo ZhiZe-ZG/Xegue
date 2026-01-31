@@ -2,9 +2,13 @@ extern crate ncurses;
 
 mod coord;
 mod screen_symbol;
+mod draw_room;
+mod room;
 
 use coord::Coord;
 use ncurses::*;
+use draw_room::{draw_room, map_to_strings, new_map};
+use room::Room;
 use screen_symbol::ScreenSymbol;
 
 fn main() {
@@ -46,6 +50,21 @@ fn main() {
     // Test ncurses coordinate conversion
     let (y, x) = player_pos.yx();
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
+
+    // Room drawing test (Rust rewrite of draw_room/vert/horiz)
+    let mut map = new_map(12, 40);
+    let room = Room {
+        pos: Coord::new(2, 2),
+        size: Coord::new(16, 8),
+        is_maze: false,
+    };
+    draw_room(&room, &mut map);
+    let _ = addstr("Room draw test:\n");
+    for line in map_to_strings(&map) {
+        let _ = addstr(&line);
+        let _ = addstr("\n");
+    }
+    let _ = addstr("\n");
 
     // Display marker at player position
     let _ = mvaddch(
