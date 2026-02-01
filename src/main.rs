@@ -1,9 +1,9 @@
 extern crate ncurses;
 
-use Xegue::coord::Coord;
-use Xegue::map::map_grid::MapGrid;
-use Xegue::map::map_structure::{put_room, Room};
-use Xegue::screen_symbol::ScreenSymbol;
+use xegue::coord::Coord;
+use xegue::map::map_grid::MapGrid;
+use xegue::map::map_structure::{put_room, Room};
+use xegue::screen_symbol::ScreenSymbol;
 use ncurses::*;
 
 fn main() {
@@ -22,7 +22,7 @@ fn main() {
     let euclidean_sq = player_pos.distance_squared(&treasure_pos);
 
     // Print text
-    let _ = addstr("=== Xegue Coordinate System Test ===\n\n");
+    let _ = addstr("=== xegue Coordinate System Test ===\n\n");
     let _ = addstr(&format!(
         "Player position: ({}, {})\n",
         player_pos.x, player_pos.y
