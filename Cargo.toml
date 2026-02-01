@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 glam = "0.31.0"
 ncurses = "6.0.1"
+rand = "0.9.2"
