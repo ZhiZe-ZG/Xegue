@@ -154,24 +154,24 @@ xcrypt.c
 /*
  ✅  * things that appear on the screens
  */
-#define PASSAGE		'#'
-#define DOOR		'+'
-#define FLOOR		'.'
-#define PLAYER		'@'
-#define TRAP		'^'
-#define STAIRS		'%'
-#define GOLD		'*'
-#define POTION		'!'
-#define SCROLL		'?'
-#define MAGIC		'$'
-#define FOOD		':'
-#define WEAPON		')'
-#define ARMOR		']'
-#define AMULET		','
-#define RING		'='
-#define STICK		'/'
-#define CALLABLE	-1 // not used
-#define R_OR_S		-2 // not used
+// #define PASSAGE		'#'
+// #define DOOR		'+'
+// #define FLOOR		'.'
+// #define PLAYER		'@'
+// #define TRAP		'^'
+// #define STAIRS		'%'
+// #define GOLD		'*'
+// #define POTION		'!'
+// #define SCROLL		'?'
+// #define MAGIC		'$'
+// #define FOOD		':'
+// #define WEAPON		')'
+// #define ARMOR		']'
+// #define AMULET		','
+// #define RING		'='
+// #define STICK		'/'
+// #define CALLABLE	-1 // not used
+// #define R_OR_S		-2 // not used
 
 /*
  * Various constants
