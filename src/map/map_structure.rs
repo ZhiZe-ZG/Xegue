@@ -1,11 +1,11 @@
-use crate::coord::Coord;
 use crate::map::map_cell::CellType;
 use crate::map::map_grid::MapGrid;
+use glam::IVec2;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Room {
-    pub pos: Coord,
-    pub size: Coord,
+    pub pos: IVec2,
+    pub size: IVec2,
     pub is_maze: bool,
     pub is_gone: bool,  /* room is gone (a corridor) */
     pub is_dark:bool, /* room is dark */

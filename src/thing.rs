@@ -1,4 +1,4 @@
-use crate::coord::Coord;
+use glam::IVec2;
 
 #[derive(Debug, Clone)]
 pub enum Thing {
@@ -8,12 +8,12 @@ pub enum Thing {
 
 #[derive(Debug, Clone)]
 pub struct MonsterThing {
-    pub pos: Coord,
+    pub pos: IVec2,
     pub turn: bool,
     pub kind: char,
     pub disguise: char,
     pub old_ch: char,
-    pub dest: Option<Coord>,
+    pub dest: Option<IVec2>,
     pub flags: i16,
     //pub stats: Stats,
     pub room_id: Option<usize>,
@@ -24,7 +24,7 @@ pub struct MonsterThing {
 #[derive(Debug, Clone)]
 pub struct ObjectThing {
     pub kind: i32,
-    pub pos: Coord,
+    pub pos: IVec2,
     pub text: Option<String>,
     pub launch: i32,
     pub pack_ch: char,

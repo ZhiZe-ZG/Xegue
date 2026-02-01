@@ -1,10 +1,20 @@
 extern crate ncurses;
 
-use xegue::coord::Coord;
+use glam::IVec2;
+use ncurses::*;
 use xegue::map::map_grid::MapGrid;
 use xegue::map::map_structure::{put_room, Room};
 use xegue::screen_symbol::ScreenSymbol;
-use ncurses::*;
+
+fn manhattan(a: IVec2, b: IVec2) -> i32 {
+    (a.x - b.x).abs() + (a.y - b.y).abs()
+}
+
+fn distance_squared(a: IVec2, b: IVec2) -> i32 {
+    let dx = a.x - b.x;
+    let dy = a.y - b.y;
+    dx * dx + dy * dy
+}
 
 fn main() {
     // Init ncurses
@@ -14,12 +24,12 @@ fn main() {
     noecho(); // Disable echoing of input characters
 
     // Test Coord struct
-    let player_pos = Coord::new(10, 5);
-    let treasure_pos = Coord::new(15, 8);
+    let player_pos = IVec2::new(10, 5);
+    let treasure_pos = IVec2::new(15, 8);
 
     // Calculate distances
-    let manhattan = player_pos.distance(&treasure_pos);
-    let euclidean_sq = player_pos.distance_squared(&treasure_pos);
+    let manhattan = manhattan(player_pos, treasure_pos);
+    let euclidean_sq = distance_squared(player_pos, treasure_pos);
 
     // Print text
     let _ = addstr("=== xegue Coordinate System Test ===\n\n");
@@ -35,7 +45,7 @@ fn main() {
     let _ = addstr(&format!("Euclidean distance²: {}\n\n", euclidean_sq));
 
     // Test coordinate arithmetic
-    let delta = Coord::new(2, -1);
+    let delta = IVec2::new(2, -1);
     let new_pos = player_pos + delta;
     let _ = addstr(&format!(
         "Move by ({}, {}): new position ({}, {})\n\n",
@@ -43,14 +53,14 @@ fn main() {
     ));
 
     // Test ncurses coordinate conversion
-    let (y, x) = player_pos.yx();
+    let (y, x) = (player_pos.y, player_pos.x);
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
 
     // Room drawing test (Rust rewrite of draw_room/vert/horiz)
     let mut map = MapGrid::init(12, 40);
     let room = Room {
-        pos: Coord::new(2, 2),
-        size: Coord::new(16, 8),
+        pos: IVec2::new(2, 2),
+        size: IVec2::new(16, 8),
         is_maze: false,
         is_dark:false,
         is_gone:false,
@@ -82,7 +92,7 @@ fn main() {
     // Eq test
     let _ = addstr(&format!(
         "(2,3) is  equal to (2,3): {}\n",
-        Coord::new(2, 3) == Coord::new(2, 3)
+        IVec2::new(2, 3) == IVec2::new(2, 3)
     ));
 
     let _ = mvaddstr(LINES() - 1, 0, "Press any key to exit...");
