@@ -7,6 +7,8 @@ pub struct Room {
     pub pos: Coord,
     pub size: Coord,
     pub is_maze: bool,
+    pub is_gone: bool,  /* room is gone (a corridor) */
+    pub is_dark:bool, /* room is dark */
 }
 
 pub fn put_room(room: &Room, map: &mut MapGrid) {

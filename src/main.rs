@@ -52,6 +52,8 @@ fn main() {
         pos: Coord::new(2, 2),
         size: Coord::new(16, 8),
         is_maze: false,
+        is_dark:false,
+        is_gone:false,
     };
     put_room(&room, &mut map);
     let _ = addstr("Room draw test:\n");
