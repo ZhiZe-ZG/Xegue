@@ -3,17 +3,15 @@ use crate::map::map_cell::{CellType, MapCell};
 pub struct MapGrid {
 	pub length: usize,
 	pub width: usize,
-	pub height: usize,
 	pub cells: Vec<MapCell>,
 }
 
 impl MapGrid {
-	pub fn init(length: usize, width: usize, height: usize) -> Self {
+	pub fn init(length: usize, width: usize) -> Self {
 		let total = length.saturating_mul(width);
 		Self {
 			length,
 			width,
-			height,
 			cells: vec![
 				MapCell {
 					cell_type: CellType::Empty,
