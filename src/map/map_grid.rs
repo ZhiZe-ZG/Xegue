@@ -1,4 +1,4 @@
-use crate::map::map_cell::MapCell;
+use crate::map::map_cell::{CellType, MapCell};
 
 pub struct MapGrid {
 	pub rows: usize,
@@ -14,7 +14,7 @@ impl MapGrid {
 			cols,
 			cells: vec![
 				MapCell {
-					ch: ' ',
+					cell_type: CellType::Empty,
 					flags: 0,
 					monst: None,
 				};
@@ -29,7 +29,7 @@ impl MapGrid {
 			let mut line = String::with_capacity(self.cols);
 			for col in 0..self.cols {
 				if let Some(cell) = self.get(row, col) {
-					line.push(cell.ch);
+					line.push(cell.cell_type.to_screen_symbol().as_char());
 				}
 			}
 			lines.push(line);

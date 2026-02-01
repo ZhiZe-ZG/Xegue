@@ -1,5 +1,6 @@
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum ScreenSymbol {
+    Empty,
     Passage,
     Door,
     Floor,
@@ -16,11 +17,14 @@ pub enum ScreenSymbol {
     Amulet,
     Ring,
     Stick,
+    WallHorizontal,
+    WallVertical,
 }
 
 impl ScreenSymbol {
     pub const fn as_char(self) -> char {
         match self {
+            ScreenSymbol::Empty => ' ',
             ScreenSymbol::Passage => '#',
             ScreenSymbol::Door => '+',
             ScreenSymbol::Floor => '.',
@@ -37,6 +41,8 @@ impl ScreenSymbol {
             ScreenSymbol::Amulet => ',',
             ScreenSymbol::Ring => '=',
             ScreenSymbol::Stick => '/',
+            ScreenSymbol::WallHorizontal => '-',
+            ScreenSymbol::WallVertical => '|',
         }
     }
 }

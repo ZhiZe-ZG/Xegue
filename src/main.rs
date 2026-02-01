@@ -1,9 +1,8 @@
 extern crate ncurses;
 
 use Xegue::coord::Coord;
-use Xegue::draw_room::draw_room;
 use Xegue::map::map_grid::MapGrid;
-use Xegue::map::map_structure::Room;
+use Xegue::map::map_structure::{put_room, Room};
 use Xegue::screen_symbol::ScreenSymbol;
 use ncurses::*;
 
@@ -54,7 +53,7 @@ fn main() {
         size: Coord::new(16, 8),
         is_maze: false,
     };
-    draw_room(&room, &mut map);
+    put_room(&room, &mut map);
     let _ = addstr("Room draw test:\n");
     for line in map.to_strings() {
         let _ = addstr(&line);
