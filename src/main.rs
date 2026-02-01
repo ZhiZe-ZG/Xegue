@@ -1,15 +1,11 @@
 extern crate ncurses;
 
-mod coord;
-mod screen_symbol;
-mod draw_room;
-mod room;
-
-use coord::Coord;
+use Xegue::coord::Coord;
+use Xegue::draw_room::draw_room;
+use Xegue::map::map_grid::MapGrid;
+use Xegue::map::map_structure::Room;
+use Xegue::screen_symbol::ScreenSymbol;
 use ncurses::*;
-use draw_room::{draw_room, map_to_strings, new_map};
-use room::Room;
-use screen_symbol::ScreenSymbol;
 
 fn main() {
     // Init ncurses
@@ -52,7 +48,7 @@ fn main() {
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
 
     // Room drawing test (Rust rewrite of draw_room/vert/horiz)
-    let mut map = new_map(12, 40);
+    let mut map = MapGrid::init(12, 40);
     let room = Room {
         pos: Coord::new(2, 2),
         size: Coord::new(16, 8),
@@ -60,7 +56,7 @@ fn main() {
     };
     draw_room(&room, &mut map);
     let _ = addstr("Room draw test:\n");
-    for line in map_to_strings(&map) {
+    for line in map.to_strings() {
         let _ = addstr(&line);
         let _ = addstr("\n");
     }
