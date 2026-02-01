@@ -1,17 +1,19 @@
 use crate::map::map_cell::{CellType, MapCell};
 
 pub struct MapGrid {
-	pub rows: usize,
-	pub cols: usize,
+	pub length: usize,
+	pub width: usize,
+	pub height: usize,
 	pub cells: Vec<MapCell>,
 }
 
 impl MapGrid {
-	pub fn init(rows: usize, cols: usize) -> Self {
-		let total = rows.saturating_mul(cols);
+	pub fn init(length: usize, width: usize, height: usize) -> Self {
+		let total = length.saturating_mul(width);
 		Self {
-			rows,
-			cols,
+			length,
+			width,
+			height,
 			cells: vec![
 				MapCell {
 					cell_type: CellType::Empty,
@@ -24,11 +26,11 @@ impl MapGrid {
 	}
 
 	pub fn to_strings(&self) -> Vec<String> {
-		let mut lines = Vec::with_capacity(self.rows);
-		for row in 0..self.rows {
-			let mut line = String::with_capacity(self.cols);
-			for col in 0..self.cols {
-				if let Some(cell) = self.get(row, col) {
+		let mut lines = Vec::with_capacity(self.length);
+		for y in 0..self.length {
+			let mut line = String::with_capacity(self.width);
+			for x in 0..self.width {
+				if let Some(cell) = self.get(y, x) {
 					line.push(cell.cell_type.to_screen_symbol().as_char());
 				}
 			}
@@ -37,16 +39,16 @@ impl MapGrid {
 		lines
 	}
 
-	pub fn index(&self, row: usize, col: usize) -> usize {
-		row * self.cols + col
+	pub fn index(&self, y: usize, x: usize) -> usize {
+		y * self.width + x
 	}
 
-	pub fn get(&self, row: usize, col: usize) -> Option<&MapCell> {
-		self.cells.get(self.index(row, col))
+	pub fn get(&self, y: usize, x: usize) -> Option<&MapCell> {
+		self.cells.get(self.index(y, x))
 	}
 
-	pub fn get_mut(&mut self, row: usize, col: usize) -> Option<&mut MapCell> {
-		let index = self.index(row, col);
+	pub fn get_mut(&mut self, y: usize, x: usize) -> Option<&mut MapCell> {
+		let index = self.index(y, x);
 		self.cells.get_mut(index)
 	}
 }

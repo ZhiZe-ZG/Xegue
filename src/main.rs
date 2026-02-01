@@ -2,8 +2,7 @@ extern crate ncurses;
 
 use glam::IVec2;
 use ncurses::*;
-use xegue::map::map_grid::MapGrid;
-use xegue::map::map_structure::{put_room, Room};
+use xegue::map::generate_map::generate_map;
 use xegue::screen_symbol::ScreenSymbol;
 
 fn manhattan(a: IVec2, b: IVec2) -> i32 {
@@ -56,17 +55,9 @@ fn main() {
     let (y, x) = (player_pos.y, player_pos.x);
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
 
-    // Room drawing test (Rust rewrite of draw_room/vert/horiz)
-    let mut map = MapGrid::init(12, 40);
-    let room = Room {
-        pos: IVec2::new(2, 2),
-        size: IVec2::new(16, 8),
-        is_maze: false,
-        is_dark:false,
-        is_gone:false,
-    };
-    put_room(&room, &mut map);
-    let _ = addstr("Room draw test:\n");
+    // Map generation test (no monsters, items, or maze)
+    let map = generate_map(24, 80, 0);
+    let _ = addstr("Map generation test:\n");
     for line in map.to_strings() {
         let _ = addstr(&line);
         let _ = addstr("\n");
