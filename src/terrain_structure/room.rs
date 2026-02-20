@@ -11,34 +11,50 @@ pub struct Room {
     pub is_dark:bool, /* room is dark */
 }
 
-//need rewrite and explain
-
 pub fn put_room(room: &Room, map: &mut TerrainGrid) {
     if room.is_maze {
         put_maze(room, map);
     } else {
-        put_vert_wall(room, map, room.pos.x);
-        put_vert_wall(room, map, room.pos.x + room.size.x - 1);
-        put_horiz_wall(room, map, room.pos.y);
-        put_horiz_wall(room, map, room.pos.y + room.size.y - 1);
+        put_room_walls(room, map);
+        put_room_floor(room, map);
+    }
+}
 
-        for y in (room.pos.y + 1)..(room.pos.y + room.size.y - 1) {
-            for x in (room.pos.x + 1)..(room.pos.x + room.size.x - 1) {
-                set_cell_type(map, x, y, TerrainCellClass::Floor);
-            }
+fn put_vertical_wall(start_y:i32, end_y:i32, x:i32, map:&mut TerrainGrid){
+    for y in start_y..=end_y{
+        set_cell_type(map, x, y, TerrainCellClass::WallVertical);
+    }
+}
+
+fn put_horizontal_wall(start_x:i32, end_x:i32, y:i32, map:&mut TerrainGrid){
+    for x in start_x..=end_x{
+        set_cell_type(map, x, y, TerrainCellClass::WallHorizontal);
+    }
+}
+
+fn put_room_walls(room: &Room, map: &mut TerrainGrid) {
+    put_vertical_wall(room.pos.y+1, room.pos.y + room.size.y - 2, room.pos.x, map);
+    put_vertical_wall(room.pos.y+1, room.pos.y + room.size.y - 2, room.pos.x + room.size.x - 1, map);
+    put_horizontal_wall(room.pos.x+1, room.pos.x + room.size.x - 2, room.pos.y, map);
+    put_horizontal_wall(room.pos.x+1, room.pos.x + room.size.x - 2, room.pos.y + room.size.y - 1, map);
+}
+
+fn put_room_floor(room: &Room, map: &mut TerrainGrid) {
+    for y in (room.pos.y + 1)..(room.pos.y + room.size.y - 1) {
+        for x in (room.pos.x + 1)..(room.pos.x + room.size.x - 1) {
+            set_cell_type(map, x, y, TerrainCellClass::Floor);
         }
     }
 }
 
-fn put_vert_wall(room: &Room, map: &mut TerrainGrid, start_x: i32) {
-    for y in (room.pos.y + 1)..=(room.pos.y + room.size.y - 1) {
-        set_cell_type(map, start_x, y, TerrainCellClass::WallVertical);
+/// Set a cell's class at (x, y) if it is inside the grid.
+fn set_cell_type(map: &mut TerrainGrid, x: i32, y: i32, cell_class: TerrainCellClass) {
+    if x < 0 || y < 0 {
+        return;
     }
-}
-
-fn put_horiz_wall(room: &Room, map: &mut TerrainGrid, start_y: i32) {
-    for x in room.pos.x..=(room.pos.x + room.size.x - 1) {
-        set_cell_type(map, x, start_y, TerrainCellClass::WallHorizontal);
+    let (x, y) = (x as usize, y as usize);
+    if let Some(cell) = map.get_mut(x, y) {
+        cell.cell_class = cell_class;
     }
 }
 
@@ -48,16 +64,5 @@ fn put_maze(room: &Room, map: &mut TerrainGrid) {
         for x in room.pos.x..(room.pos.x + room.size.x) {
             set_cell_type(map, x, y, TerrainCellClass::Passage);
         }
-    }
-}
-
-/// Set a cell's class at (x, y) if it is inside the grid.
-fn set_cell_type(map: &mut TerrainGrid, x: i32, y: i32, cell_type: TerrainCellClass) {
-    if x < 0 || y < 0 {
-        return;
-    }
-    let (x, y) = (x as usize, y as usize);
-    if let Some(cell) = map.get_mut(x, y) {
-        cell.cell_class = cell_type;
     }
 }

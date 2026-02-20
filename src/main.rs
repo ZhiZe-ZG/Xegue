@@ -2,7 +2,8 @@ extern crate ncurses;
 
 use glam::IVec2;
 use ncurses::*;
-use xegue::map::generate_map::generate_map;
+use xegue::dungeon_level::dungeon_level::generate_dungeon_level;
+use xegue::terminal::draw_terrain::terrain_to_lines;
 use xegue::terminal::terminal_symbol::TerminalSymbol;
 
 fn manhattan(a: IVec2, b: IVec2) -> i32 {
@@ -55,10 +56,31 @@ fn main() {
     let (y, x) = (player_pos.y, player_pos.x);
     let _ = addstr(&format!("For ncurses mvaddch: y={}, x={}\n\n", y, x));
 
-    // Map generation test (no monsters, items, or maze)
-    let map = generate_map(24, 80, 0);
-    let _ = addstr("Map generation test:\n");
-    for line in map.to_strings() {
+    // DungeonLevel generation test
+    let level = generate_dungeon_level();
+    // Check if the rooms list is empty or not
+    if level.rooms.is_empty() {
+        let _ = addstr("No rooms generated!\n");
+    }else {
+        let _ = addstr(&format!("Generated {} rooms.\n", level.rooms.len()));
+        // Print details of the first few rooms
+        for (i, room) in level.rooms.iter().take(3).enumerate()
+        {
+            let _ = addstr(&format!(
+                "Room {}: pos=({}, {}), size=({}, {}), is_maze={}, is_gone={}, is_dark={}\n",
+                i,
+                room.pos.x,
+                room.pos.y,
+                room.size.x,
+                room.size.y,
+                room.is_maze,
+                room.is_gone,
+                room.is_dark
+            ));
+        }
+    }
+    let _ = addstr("Dungeon level generation test:\n");
+    for line in terrain_to_lines(&level.terrain) {
         let _ = addstr(&line);
         let _ = addstr("\n");
     }

@@ -90,7 +90,7 @@ xcrypt.c
 /*
  * Maximum number of different things
  */
-#define MAXROOMS	9
+// #define MAXROOMS	9
 #define MAXTHINGS	9
 #define MAXOBJ		9
 #define MAXPACK		23
@@ -98,8 +98,8 @@ xcrypt.c
 #define AMULETLEVEL	26
 #define	NUMTHINGS	7	/* number of types of things */
 #define MAXPASS		13	/* upper limit on number of passages */
-#define	NUMLINES	24
-#define	NUMCOLS		80
+// #define	NUMLINES	24
+// #define	NUMCOLS		80
 #define STATLINE		(NUMLINES - 1)
 #define BORE_LEVEL	50
 
