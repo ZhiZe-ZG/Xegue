@@ -1,4 +1,4 @@
-use crate::screen_symbol::ScreenSymbol;
+use crate::terminal::terminal_symbol::TerminalSymbol;
 use crate::thing::Thing;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -25,27 +25,27 @@ pub enum CellType {
 }
 
 impl CellType {
-    pub fn to_screen_symbol(self) -> ScreenSymbol {
+    pub fn to_screen_symbol(self) -> TerminalSymbol {
         match self {
-            CellType::Empty => ScreenSymbol::Empty,
-            CellType::Passage => ScreenSymbol::Passage,
-            CellType::Door => ScreenSymbol::Door,
-            CellType::Floor => ScreenSymbol::Floor,
-            CellType::Player => ScreenSymbol::Player,
-            CellType::Trap => ScreenSymbol::Trap,
-            CellType::Stairs => ScreenSymbol::Stairs,
-            CellType::Gold => ScreenSymbol::Gold,
-            CellType::Potion => ScreenSymbol::Potion,
-            CellType::Scroll => ScreenSymbol::Scroll,
-            CellType::Magic => ScreenSymbol::Magic,
-            CellType::Food => ScreenSymbol::Food,
-            CellType::Weapon => ScreenSymbol::Weapon,
-            CellType::Armor => ScreenSymbol::Armor,
-            CellType::Amulet => ScreenSymbol::Amulet,
-            CellType::Ring => ScreenSymbol::Ring,
-            CellType::Stick => ScreenSymbol::Stick,
-            CellType::WallHorizontal => ScreenSymbol::WallHorizontal,
-            CellType::WallVertical => ScreenSymbol::WallVertical,
+            CellType::Empty => TerminalSymbol::Empty,
+            CellType::Passage => TerminalSymbol::Passage,
+            CellType::Door => TerminalSymbol::Door,
+            CellType::Floor => TerminalSymbol::Floor,
+            CellType::Player => TerminalSymbol::Player,
+            CellType::Trap => TerminalSymbol::Trap,
+            CellType::Stairs => TerminalSymbol::Stairs,
+            CellType::Gold => TerminalSymbol::Gold,
+            CellType::Potion => TerminalSymbol::Potion,
+            CellType::Scroll => TerminalSymbol::Scroll,
+            CellType::Magic => TerminalSymbol::Magic,
+            CellType::Food => TerminalSymbol::Food,
+            CellType::Weapon => TerminalSymbol::Weapon,
+            CellType::Armor => TerminalSymbol::Armor,
+            CellType::Amulet => TerminalSymbol::Amulet,
+            CellType::Ring => TerminalSymbol::Ring,
+            CellType::Stick => TerminalSymbol::Stick,
+            CellType::WallHorizontal => TerminalSymbol::WallHorizontal,
+            CellType::WallVertical => TerminalSymbol::WallVertical,
         }
     }
 }

@@ -1,3 +1,3 @@
-pub mod screen_symbol;
+pub mod terminal;
 pub mod map;
 pub mod thing;

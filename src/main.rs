@@ -3,7 +3,7 @@ extern crate ncurses;
 use glam::IVec2;
 use ncurses::*;
 use xegue::map::generate_map::generate_map;
-use xegue::screen_symbol::ScreenSymbol;
+use xegue::terminal::terminal_symbol::TerminalSymbol;
 
 fn manhattan(a: IVec2, b: IVec2) -> i32 {
     (a.x - b.x).abs() + (a.y - b.y).abs()
@@ -68,7 +68,7 @@ fn main() {
     let _ = mvaddch(
         player_pos.y,
         player_pos.x,
-        ScreenSymbol::Player.as_char() as u32,
+        TerminalSymbol::Player.as_char() as u32,
     );
     let _ = mvaddstr(player_pos.y + 1, player_pos.x - 1, "YOU");
 
@@ -76,7 +76,7 @@ fn main() {
     let _ = mvaddch(
         treasure_pos.y,
         treasure_pos.x,
-        ScreenSymbol::Gold.as_char() as u32,
+        TerminalSymbol::Gold.as_char() as u32,
     );
     let _ = mvaddstr(treasure_pos.y + 1, treasure_pos.x - 1, "GOLD");
 
