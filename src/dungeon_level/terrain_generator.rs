@@ -4,6 +4,7 @@ use rand::Rng;
 use crate::terrain::terrain_grid::TerrainGrid;
 use crate::terrain_structure::room::put_room;
 use crate::terrain_structure::room::Room;
+use crate::terrain_structure::room_grid::RoomAdjacency; // new import
 
 pub struct TerrainGenerator {
     pub terrain_size: IVec2,
@@ -76,6 +77,15 @@ impl TerrainGenerator {
         }
 
         rooms
+    }
+
+    /// Generate a random room adjacency matrix for this level.
+    ///
+    /// This only creates the abstract connection graph; it does not
+    /// actually carve corridors on the terrain.
+    pub fn generate_room_connections(&self) -> RoomAdjacency {
+        let mut rng = rand::rng();
+        RoomAdjacency::generate_random_graph(&mut rng)
     }
 
     /// Put given rooms onto the provided terrain grid.
