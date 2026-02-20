@@ -35,8 +35,8 @@ fn put_horizontal_wall(start_x:i32, end_x:i32, y:i32, map:&mut TerrainGrid){
 fn put_room_walls(room: &Room, map: &mut TerrainGrid) {
     put_vertical_wall(room.pos.y+1, room.pos.y + room.size.y - 2, room.pos.x, map);
     put_vertical_wall(room.pos.y+1, room.pos.y + room.size.y - 2, room.pos.x + room.size.x - 1, map);
-    put_horizontal_wall(room.pos.x+1, room.pos.x + room.size.x - 2, room.pos.y, map);
-    put_horizontal_wall(room.pos.x+1, room.pos.x + room.size.x - 2, room.pos.y + room.size.y - 1, map);
+    put_horizontal_wall(room.pos.x, room.pos.x + room.size.x - 1, room.pos.y, map);
+    put_horizontal_wall(room.pos.x, room.pos.x + room.size.x - 1, room.pos.y + room.size.y - 1, map);
 }
 
 fn put_room_floor(room: &Room, map: &mut TerrainGrid) {

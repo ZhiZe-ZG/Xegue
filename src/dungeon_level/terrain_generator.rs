@@ -60,8 +60,8 @@ impl TerrainGenerator {
             let pos_x = top_x + rng.random_range(0..=(bsze_x - 4).max(0));
             let pos_y = top_y + rng.random_range(0..=(bsze_y - 4).max(0));
             // size is randomly choose in the left places
-            let size_x = rng.random_range(0..=(bsze_x - (pos_x - top_x) - 1).max(4));
-            let size_y = rng.random_range(0..=(bsze_y - (pos_y - top_y) - 1).max(4));
+            let size_x = rng.random_range(0..=(bsze_x - (pos_x - top_x) - 1).max(0)).max(4);
+            let size_y = rng.random_range(0..=(bsze_y - (pos_y - top_y) - 1).max(0)).max(4);
 
             rooms.push(Room {
                 pos: IVec2::new(pos_x, pos_y),
