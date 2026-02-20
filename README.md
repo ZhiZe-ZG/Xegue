@@ -1422,3 +1422,17 @@ struct h_list helpstr[] = {
 ```
 
 - [ ] Write document and guide.
+
+## Default Coordinate
+
+Axes and the screen:
+
+- x axis: Parallel to a line of English text on your screen. The left edge is 0, and values increase to the right.
+- y axis: Vertical from top to bottom. The top edge is 0, and values increase downward.
+- z axis: Perpendicular to the screen. The screen plane is 0; values increase outward (from inside the screen toward your face).
+
+Correspondence between measurement names and axes:
+
+- width: x axis
+- length: y axis
+- height: z axis
