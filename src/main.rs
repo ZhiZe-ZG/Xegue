@@ -61,11 +61,10 @@ fn main() {
     // Check if the rooms list is empty or not
     if level.rooms.is_empty() {
         let _ = addstr("No rooms generated!\n");
-    }else {
+    } else {
         let _ = addstr(&format!("Generated {} rooms.\n", level.rooms.len()));
         // Print details of the first few rooms
-        for (i, room) in level.rooms.iter().take(3).enumerate()
-        {
+        for (i, room) in level.rooms.iter().take(3).enumerate() {
             let _ = addstr(&format!(
                 "Room {}: pos=({}, {}), size=({}, {}), is_maze={}, is_gone={}, is_dark={}\n",
                 i,
@@ -79,6 +78,30 @@ fn main() {
             ));
         }
     }
+
+    // Test / display passages
+    // if level.passages.is_empty() {
+    //     let _ = addstr("No passages carved.\n");
+    // } else {
+    //     let _ = addstr(&format!(
+    //         "Generated {} passages.\n",
+    //         level.passages.len()
+    //     ));
+    //     for (i, p) in level.passages.iter().take(5).enumerate() {
+    //         let _ = addstr(&format!(
+    //             "Passage {}: rooms {}-{}, door_a=({}, {}), door_b=({}, {}), tiles={}\n",
+    //             i,
+    //             p.room_a,
+    //             p.room_b,
+    //             p.door_a.x,
+    //             p.door_a.y,
+    //             p.door_b.x,
+    //             p.door_b.y,
+    //             p.tiles.len()
+    //         ));
+    //     }
+    // }
+
     let _ = addstr("Dungeon level generation test:\n");
     for line in terrain_to_lines(&level.terrain) {
         let _ = addstr(&line);

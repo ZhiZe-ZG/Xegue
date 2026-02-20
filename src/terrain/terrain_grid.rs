@@ -29,4 +29,32 @@ impl TerrainGrid {
         let index = self.index(x, y);
         self.cells.get_mut(index)
     }
+
+    /// Mark a cell as a corridor / passage.
+    pub fn set_passage(&mut self, x: i32, y: i32) {
+        if x < 0 || y < 0 {
+            return;
+        }
+        let (ux, uy) = (x as usize, y as usize);
+        if ux >= self.width || uy >= self.height {
+            return;
+        }
+        if let Some(cell) = self.get_mut(ux, uy) {
+            cell.cell_class = TerrainCellClass::Passage;
+        }
+    }
+
+    /// Mark a cell as a door.
+    pub fn set_door(&mut self, x: i32, y: i32) {
+        if x < 0 || y < 0 {
+            return;
+        }
+        let (ux, uy) = (x as usize, y as usize);
+        if ux >= self.width || uy >= self.height {
+            return;
+        }
+        if let Some(cell) = self.get_mut(ux, uy) {
+            cell.cell_class = TerrainCellClass::Door;
+        }
+    }
 }

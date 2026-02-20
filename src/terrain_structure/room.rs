@@ -2,13 +2,14 @@ use crate::terrain::terrain_cell::TerrainCellClass;
 use crate::terrain::terrain_grid::TerrainGrid;
 use glam::IVec2;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub struct Room {
     pub pos: IVec2, // let top corner of the room
     pub size: IVec2,
     pub is_maze: bool,
     pub is_gone: bool,  /* room is gone (a corridor) */
     pub is_dark:bool, /* room is dark */
+    pub doors: Vec<IVec2>,
 }
 
 pub fn put_room(room: &Room, map: &mut TerrainGrid) {
@@ -54,7 +55,7 @@ fn set_cell_type(map: &mut TerrainGrid, x: i32, y: i32, cell_class: TerrainCellC
     }
     let (x, y) = (x as usize, y as usize);
     if let Some(cell) = map.get_mut(x, y) {
-        cell.cell_class = cell_class;
+        cell.cell_class = cell_class; // <- fix: use `cell_class` field
     }
 }
 
