@@ -42,11 +42,17 @@ impl TerrainGenerator {
             let top_x = (i % 3) as i32 * bsze_x + 1;
             let top_y = (i / 3) as i32 * bsze_y;
 
+            // pos is randomly set based on the top left corner of the block, and the size is randomly set based on the block size
+            let pos_x = top_x + rng.random_range(0..=(bsze_x - 4).max(0));
+            let pos_y = top_y + rng.random_range(0..=(bsze_y - 4).max(0));
+
             if gone_rooms[i] {
                 // mark gone room
                 // this room is lack from the terrain
+                // the pos of gone room should be random in the block
+                // this should used in put passages to connect the room with other rooms, and make sure the path is not too long
                 rooms.push(Room {
-                    pos: IVec2::new(top_x, top_y),
+                    pos: IVec2::new(pos_x, pos_y),
                     size: IVec2::new(0, 0),
                     is_maze: false,
                     is_dark: false,
@@ -56,9 +62,6 @@ impl TerrainGenerator {
             }
 
             // random set position and size of the room
-            // pos is randomly set based on the top left corner of the block, and the size is randomly set based on the block size
-            let pos_x = top_x + rng.random_range(0..=(bsze_x - 4).max(0));
-            let pos_y = top_y + rng.random_range(0..=(bsze_y - 4).max(0));
             // size is randomly choose in the left places
             let size_x = rng.random_range(0..=(bsze_x - (pos_x - top_x) - 1).max(0)).max(4);
             let size_y = rng.random_range(0..=(bsze_y - (pos_y - top_y) - 1).max(0)).max(4);
