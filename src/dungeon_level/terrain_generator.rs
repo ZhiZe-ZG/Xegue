@@ -135,9 +135,6 @@ impl TerrainGenerator {
                         let (left, right) = rooms.split_at_mut(j);
                         (&mut left[i], &mut right[0])
                     };
-                    if r1.is_gone || r2.is_gone {
-                        continue;
-                    }
                     if let Some(p) =
                         self.carve_corridor_between_rooms(grid, r1, r2, i, j)
                     {
@@ -209,73 +206,163 @@ impl TerrainGenerator {
             // Vertical adjacency: from is above to.
             del = IVec2::new(0, 1);
 
-            // Compute horizontal overlap between the two rooms.
-            let from_left = from.pos.x;
-            let from_right = from.pos.x + from.size.x - 1;
-            let to_left = to.pos.x;
-            let to_right = to.pos.x + to.size.x - 1;
-
-            let overlap_left = from_left.max(to_left);
-            let overlap_right = from_right.min(to_right);
-
-            // Use the middle of overlap as the door column if there is overlap.
-            // Otherwise, fall back to original random columns, still aligned.
-            let door_x = if overlap_left <= overlap_right {
-                (overlap_left + overlap_right) / 2
-            } else {
-                // no overlap: pick random columns but still "aligned" by choice
-                if from.size.x > 2 {
-                    from.pos.x + rng.random_range(1..from.size.x - 1)
-                } else {
-                    from.pos.x
+            match (from.is_gone, to.is_gone) {
+                (true, true) => {
+                    // Both gone: connect centers.
+                    spos = from.pos;
+                    epos = to.pos;
+                    distance = (spos.y - epos.y).abs() - 1;
+                    turn_delta = IVec2::new(if spos.x < epos.x { 1 } else { -1 }, 0);
+                    turn_distance = (spos.x - epos.x).abs();
                 }
-            };
+                (true, false) => {
+                    // From gone (top), to normal (bottom). Align to's door to from.x.
+                    spos = from.pos;
 
-            // from door: bottom wall
-            spos.x = door_x.clamp(from.pos.x + 1, from.pos.x + from.size.x - 2);
-            spos.y = from.pos.y + from.size.y - 1;
+                    let door_x = spos.x.clamp(
+                        to.pos.x + 1,
+                        to.pos.x + to.size.x - 2,
+                    );
 
-            // to door: top wall, same x
-            epos.x = door_x.clamp(to.pos.x + 1, to.pos.x + to.size.x - 2);
-            epos.y = to.pos.y;
+                    epos.x = door_x;
+                    epos.y = to.pos.y;
 
-            distance = (spos.y - epos.y).abs() - 1;
-            turn_delta = IVec2::new(if spos.x < epos.x { 1 } else { -1 }, 0);
-            turn_distance = (spos.x - epos.x).abs();
+                    distance = (spos.y - epos.y).abs() - 1;
+                    turn_delta = IVec2::new(if spos.x < epos.x { 1 } else { -1 }, 0);
+                    turn_distance = (spos.x - epos.x).abs();
+                }
+                (false, true) => {
+                    // From normal (top), to gone (bottom). Place door on from bottom.
+                    let door_x = to.pos.x.clamp(
+                        from.pos.x + 1,
+                        from.pos.x + from.size.x - 2,
+                    );
+
+                    spos.x = door_x;
+                    spos.y = from.pos.y + from.size.y - 1;
+                    epos = to.pos;
+
+                    distance = (spos.y - epos.y).abs() - 1;
+                    turn_delta = IVec2::new(if spos.x < epos.x { 1 } else { -1 }, 0);
+                    turn_distance = (spos.x - epos.x).abs();
+                }
+                (false, false) => {
+                    // Both normal rooms: use overlap-aware placement.
+                    let from_left = from.pos.x;
+                    let from_right = from.pos.x + from.size.x - 1;
+                    let to_left = to.pos.x;
+                    let to_right = to.pos.x + to.size.x - 1;
+
+                    let overlap_left = from_left.max(to_left);
+                    let overlap_right = from_right.min(to_right);
+
+                    // Use the middle of overlap as the door column if there is overlap.
+                    // Otherwise, fall back to original random columns, still aligned.
+                    let door_x = if overlap_left <= overlap_right {
+                        (overlap_left + overlap_right) / 2
+                    } else {
+                        // no overlap: pick random columns but still "aligned" by choice
+                        if from.size.x > 2 {
+                            from.pos.x + rng.random_range(1..from.size.x - 1)
+                        } else {
+                            from.pos.x
+                        }
+                    };
+
+                    // from door: bottom wall
+                    spos.x = door_x.clamp(from.pos.x + 1, from.pos.x + from.size.x - 2);
+                    spos.y = from.pos.y + from.size.y - 1;
+
+                    // to door: top wall, same x
+                    epos.x = door_x.clamp(to.pos.x + 1, to.pos.x + to.size.x - 2);
+                    epos.y = to.pos.y;
+
+                    distance = (spos.y - epos.y).abs() - 1;
+                    turn_delta = IVec2::new(if spos.x < epos.x { 1 } else { -1 }, 0);
+                    turn_distance = (spos.x - epos.x).abs();
+                }
+            }
         } else if direc == 'r' {
             // Horizontal adjacency: from is left of to.
             del = IVec2::new(1, 0);
 
-            // Compute vertical overlap between the two rooms.
-            let from_top = from.pos.y;
-            let from_bottom = from.pos.y + from.size.y - 1;
-            let to_top = to.pos.y;
-            let to_bottom = to.pos.y + to.size.y - 1;
-
-            let overlap_top = from_top.max(to_top);
-            let overlap_bottom = from_bottom.min(to_bottom);
-
-            let door_y = if overlap_top <= overlap_bottom {
-                (overlap_top + overlap_bottom) / 2
-            } else {
-                if from.size.y > 2 {
-                    from.pos.y + rng.random_range(1..from.size.y - 1)
-                } else {
-                    from.pos.y
+            match (from.is_gone, to.is_gone) {
+                (true, true) => {
+                    // Both gone: connect centers.
+                    spos = from.pos;
+                    epos = to.pos;
+                    distance = (spos.x - epos.x).abs() - 1;
+                    turn_delta =
+                        IVec2::new(0, if spos.y < epos.y { 1 } else { -1 });
+                    turn_distance = (spos.y - epos.y).abs();
                 }
-            };
+                (true, false) => {
+                    // From gone (left), to normal (right). Align to's door to from.y.
+                    spos = from.pos;
 
-            // from door: right wall
-            spos.x = from.pos.x + from.size.x - 1;
-            spos.y = door_y.clamp(from.pos.y + 1, from.pos.y + from.size.y - 2);
+                    let door_y = spos.y.clamp(
+                        to.pos.y + 1,
+                        to.pos.y + to.size.y - 2,
+                    );
 
-            // to door: left wall, same y
-            epos.x = to.pos.x;
-            epos.y = door_y.clamp(to.pos.y + 1, to.pos.y + to.size.y - 2);
+                    epos.x = to.pos.x;
+                    epos.y = door_y;
 
-            distance = (spos.x - epos.x).abs() - 1;
-            turn_delta = IVec2::new(0, if spos.y < epos.y { 1 } else { -1 });
-            turn_distance = (spos.y - epos.y).abs();
+                    distance = (spos.x - epos.x).abs() - 1;
+                    turn_delta =
+                        IVec2::new(0, if spos.y < epos.y { 1 } else { -1 });
+                    turn_distance = (spos.y - epos.y).abs();
+                }
+                (false, true) => {
+                    // From normal (left), to gone (right). Place door on from right wall.
+                    let door_y = to.pos.y.clamp(
+                        from.pos.y + 1,
+                        from.pos.y + from.size.y - 2,
+                    );
+
+                    spos.x = from.pos.x + from.size.x - 1;
+                    spos.y = door_y;
+                    epos = to.pos;
+
+                    distance = (spos.x - epos.x).abs() - 1;
+                    turn_delta =
+                        IVec2::new(0, if spos.y < epos.y { 1 } else { -1 });
+                    turn_distance = (spos.y - epos.y).abs();
+                }
+                (false, false) => {
+                    // Both normal rooms: use overlap-aware placement.
+                    let from_top = from.pos.y;
+                    let from_bottom = from.pos.y + from.size.y - 1;
+                    let to_top = to.pos.y;
+                    let to_bottom = to.pos.y + to.size.y - 1;
+
+                    let overlap_top = from_top.max(to_top);
+                    let overlap_bottom = from_bottom.min(to_bottom);
+
+                    let door_y = if overlap_top <= overlap_bottom {
+                        (overlap_top + overlap_bottom) / 2
+                    } else {
+                        if from.size.y > 2 {
+                            from.pos.y + rng.random_range(1..from.size.y - 1)
+                        } else {
+                            from.pos.y
+                        }
+                    };
+
+                    // from door: right wall
+                    spos.x = from.pos.x + from.size.x - 1;
+                    spos.y = door_y.clamp(from.pos.y + 1, from.pos.y + from.size.y - 2);
+
+                    // to door: left wall, same y
+                    epos.x = to.pos.x;
+                    epos.y = door_y.clamp(to.pos.y + 1, to.pos.y + to.size.y - 2);
+
+                    distance = (spos.x - epos.x).abs() - 1;
+                    turn_delta =
+                        IVec2::new(0, if spos.y < epos.y { 1 } else { -1 });
+                    turn_distance = (spos.y - epos.y).abs();
+                }
+            }
         } else {
             return None;
         }
